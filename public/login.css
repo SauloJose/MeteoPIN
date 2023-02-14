@@ -1,0 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,500;0,700;0,900;1,700&display=swap');
+
+/* Variáveis para login*/
+:root{
+    --color-name: #2560b9;
+    --color-primary: #7380ec;
+    --color-danger: #ff7782;
+    --color-sucess: #41f1b6;
+    --color-warning: #ffbb55;
+    --color-white: #fff;
+    --color-info-dark: #7d8da1;
+    --color-info-light: #dce1eb;
+    --color-dark: #363949;
+    --color-light: rgba(132,139,200,0.18);
+    --color-primary-variant: #111e88;
+    --color-dark-variant: #677483;
+    --color-background: #f6f6f9;
+    --color-purple: #640094;
+
+
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+
+    --box-shadow: 0 1rem 2rem var(--color-light);
+
+    --card-border-radius: 1.6rem;
+}
+
+
+body{
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    background: var(--color-background);
+    user-select: none;
+    overflow-x: hidden;
+    color: var(--color-dark);
+}
+
+.container{
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    margin: 0;
+    grid-template-columns: repeat(2,1fr);
+    gap: 0;
+    padding: 1rem 1rem;
+}
+
+.wave{
+    position: fixed;
+    width: 100vw;
+    height: auto;
+    left: -30vw;
+    margin: 0;
+    z-index: -1;
+}
+
+#logoImg img{
+    width: 1vw;
+    min-width: 60px;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+}
+
+
+.login-container {
+    margin-top: 8rem;
+    background: #f6f6f9;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+div#space{
+    width: 70vw;
+}
+
+form{
+    width: 20vw;
+    justify-content: center;
+    text-align: center;
+}
+
+form h2{
+    font-size: 2.9rem;
+    text-transform: uppercase;
+    margin: 2rem 0;
+    color: #333;
+}
+
+div#logoInfos{
+    margin-bottom: 2rem;
+}
+.input-div{
+    position: relative;
+    display: grid;
+    grid-template-columns: 7% 93%;
+    margin: 2rem 0;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid var(--color-dark-variant);
+}
+
+.input-div.focus .material-icons-sharp i{
+    color: var(--color-purple);
+    
+}
+
+.input-div.focus div h5{
+    top: -0.8rem;
+    font-size: 1.2rem;
+}
+
+.input-div::after, .input-div::before{
+    content: '';
+    position: absolute;
+    bottom: -0.2rem;
+    width: 0%;
+    height: 0.2rem;
+    background-color: var(--color-dark-variant);
+    transition: .3s;
+}
+
+.input-div::after{
+    right: 50%;
+}
+.input-div::before{
+    left: 50%;
+}
+
+.input-div.focus::after, .input-div.focus::before{
+    width: 50%;
+    background-color: var(--color-purple);
+}
+
+.input-div.one{
+    margin-top: 1rem;
+}
+
+.input-div.two{
+    margin-bottom: 0.4rem;
+}
+
+.material-icons-sharp i{
+    color: #d9d9d9;
+    transition: .3s;
+}
+
+.input-div > div{
+    position: relative;
+    height: 2.4rem;
+}
+
+.input-div > div > h5{
+    position: absolute;
+    left: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 16px;
+    transition: .3s;
+}
+
+.login-input{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0.5rem 0.7rem;
+    font-size: 1.2rem;
+    color: #555;
+    font-family: 'Poppins',sans-serif;
+}
+
+.resetPassword{
+    text-align: right;
+    text-decoration: none;
+    color: #999;
+    font-size: 0.9rem;
+    transform: .3s;
+}
+
+a{
+    font-size: 1rem;
+    transform: .3s;
+}
+
+a.resetPassword:hover{
+    color: #033625
+}
+
+a:hover{
+    color: rgb(204, 0, 255) ;
+}
+
+div #sigIn{
+    color: var(--color-info-dark);
+    margin-top: 2.4rem;
+    font-size: 1rem;
+    transform: .3s;
+}
+
+div #recovPass{
+    display: block;
+}
+
+
+#logo{
+    position: relative;
+    text-align: center;
+    justify-content: center;
+
+}
+
+.sigInBtn{
+    display: block;
+    width: 100%;
+    height: 50px;
+    border-radius: 0;
+    margin: 2.0rem 0;
+    font-size: 1.4rem;
+    outline: none;
+    border: none;
+    background-image: linear-gradient(to right, #6a23b5, #640094,#6a23b5);
+    cursor: pointer;
+    color: #fff;
+    background-size: 200%;
+    text-transform: uppercase;
+    transition: .4s;
+}
+
+#loginError h5{
+    color: var(--color-danger);
+    font-size: 8pt;
+}
+.sigInBtn:hover{
+    background: right #640094;
+}
+
+div #perData{
+    display: block;
+    margin: 0;
+}
+
+div #perdata > input {
+    display: block;
+}
+
+@media screen and (max-width: 1300px){
+    .container{
+        gap: 0;
+    }
+}
+
+@media screen and (max-width: 1250px){
+    form h2{
+        font-size: 2.8rem;
+        margin: 0.5rem 0;
+    }
+
+}
+
+@media screen and (max-width: 1206px){
+    form{
+        width: 290px;
+    }
+
+    .container{
+        grid-template-columns: 1fr;
+    }
+
+    .wave{
+        display: none;
+    }
+
+    .login-container{
+        margin-top: -5rem;
+        justify-content: center;
+    }
+}
