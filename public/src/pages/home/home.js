@@ -315,12 +315,12 @@ onAuthStateChanged(auth, (user) => {
       var pressure = jsonData.pressure;
       var pluviometer= jsonData.pluviometer;
       var timestamp = jsonData.timestamp;
-=======
+
     lastNReads = query(lastReads,limitToLast(chartRange));
     onValue(lastNReads, (snapshot)=>{
       var jsonData = Object.values(snapshot.toJSON()); //puxa todos os valores de uma vez mas na forma de objeto
       var data = [];
->>>>>>> 538416a5d76e095692aab7a5275ef180403b9fab
+
 
       jsonData.forEach(element => {
         data.push(element);
