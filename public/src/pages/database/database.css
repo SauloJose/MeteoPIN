@@ -121,7 +121,7 @@ gap: 1.6rem;
 }
 
 #newDataButton{
-margin-top: 2rem;
+margin-top: 0.2rem;
 }
 
 .btnMoreData{
@@ -442,13 +442,18 @@ gap: 1rem;
 margin-bottom: 1rem;
 }
 
-
+/* Estilo do aviso*/
+#avisos{
+    color: var(--color-danger);
+    font-size: 0.8rem;
+}
 /* MEDIA QUERIES para tablets grandes */
 @media screen and (max-width: 1200px){
 
 .container{
     width:94%;
     grid-template-columns: 7rem auto 23rem;
+    border-bottom: 0;
 }
 
 aside .logo h2{
