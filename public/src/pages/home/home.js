@@ -37,7 +37,6 @@ import {
 
 /* FIM DA SEÇÃO DE IMPORTS */
 /* FUNÇÕES DO SCRIPT */
-
 /* ================ PLOT DOS CHARTS ==================== */
 //Convertendo data e hora
 function epochToJsDate(epochTime){
@@ -55,25 +54,41 @@ function epochToDateTime(epochTime){
   return dateTime;
 }
 
-//função para plotar os valores nos charts
-function plotValues(chart, timestamp, value){
-  var x = epochToJsDate(timestamp-10800).getTime();
+function epochToTime(epochTime){
+  var epochDate = new Date(epochToJsDate(epochTime));
+  var Time = ("00" + epochDate.getHours()).slice(-2) + ":" +
+  ("00" + epochDate.getMinutes()).slice(-2) + ":" +
+  ("00" + epochDate.getSeconds()).slice(-2);
+
+  return Time;
+}
+
+//função para plotar valores nos gráficos de forma individual
+function plotValues(chart, timestamp, value, chartRange){
+  var x = epochToTime(timestamp-10800).getTime();
   var y = Number(value);
-  if(chart.series[0].data.length >40){
+  if(chart.series[0].data.length >chartRange){
     chart.series[0].addPoint([x,y],true,true,true);
   }else{
     chart.series[0].addPoint([x,y],true,false,true);
   }
 }
 
-//função parar criar o gráfico de uma vez só
-function plotGraph(chart, dados){
-  //chart: objeto chart
-  //dados é um json com os valores x e y, após pegar do banco. 
-  var x; //Valores de x
-  var y; //valores de y
-
-  //Adicionado tudo de uma vez no gráfico.
+//função parar criar o gráfico de uma vez só vez, recuperando os valores.
+function UpdateGraph(chart, dataX, dataY){
+  var formattedTimestamps = dataX.map((timestamp) => {
+    return epochToDateTime(timestamp);
+  });
+  chart.update({
+    series: [{
+      data: dataY,
+      xAxis: 0,
+      yAxis: 0
+    }],
+    xAxis: {
+      categories: formattedTimestamps
+    }
+  });
 }
 
 /* FIM DAS FUNÇÕES DO SCRIPT */
@@ -182,12 +197,18 @@ onAuthStateChanged(auth, (user) => {
     var chartRef = ref(db,chartPath);
     var dbnickNamePath=ref(db,nickNamePath);
 
+    //Caso não tenha escolha, 30 por default
+    chartRange = 30; //Para evitar conflito
+    set(chartRef, 30);
+
     //Adicionando a funcionalidade de escolher quantas leituras terei.
     okBtn.addEventListener('click', ()=>{
      if(chartInput.value < 1){
-     set(chartRef,30);
+      set(chartRef,);
      }else{
-     set(chartRef, chartInput.value);}});  
+      set(chartRef, chartInput.value);
+    }
+    }); 
 
     //Constantes importantes
     //puxa as ultimas leituras e plota elas nos charts, junto com o range
@@ -205,12 +226,6 @@ onAuthStateChanged(auth, (user) => {
     },{//carregar dados do cashe
       onlyOnce: true
     });
-
-    /*Esse intervalo do código toma muito tempo! */
-
-    //Caso não tenha escolha, 30 por default
-    chartRange = 30; //Para evitar conflito
-    set(chartRef, 30);
 
 
     //Aqui tem um "ouvinte" para puxar a ultima leitura.
@@ -235,11 +250,12 @@ onAuthStateChanged(auth, (user) => {
     
     //atualizar dados do gráfico de acordo com o range no banco
     onValue(chartRef, (snapshot) => {
+      //Tamanho do chart que foi utilizado
       chartRange = Number(snapshot.val());
 
       //valor que varia de acordo com a mudança no chart.
       lastNReads = query(lastReads,limitToLast(chartRange));
-
+      console.log(chartRange);
       //Deleta os charts para então refazê-los
       chartT.destroy();
       chartH.destroy();
@@ -252,39 +268,53 @@ onAuthStateChanged(auth, (user) => {
       chartP=createPressureChart();
       chartPluv=createPluvChart();  
 
-      //Adicionar as ultimas leituras
-      onChildAdded(lastNReads,(snapshot) =>{
-      var jsonData = snapshot.toJSON(); //Puxa um json da base de dados?
-      //variáveis para salvar as leituras da base de dados
-      var temperature = jsonData.temperature;
-      var humidity = jsonData.humidity;
-      var pressure = jsonData.pressure;
-      var pluviometer= jsonData.pluviometer;
-      var timestamp = jsonData.timestamp;
 
-      plotValues(chartT ,timestamp, temperature);
-      plotValues(chartP,timestamp, pressure);
-      plotValues(chartPluv,timestamp, pluviometer);
-      plotValues(chartH,timestamp, humidity);
+      //Adicionar as leituras
+      onValue(lastNReads, (snapshot)=>{
+      var jsonData = Object.values(snapshot.toJSON()); //puxa todos os valores de uma vez mas na forma de objeto
+      var data = [];
+
+      jsonData.forEach(element => {
+        data.push(element);
       });
+
+      var temps = data.map(obj => obj.temperature);
+      var humiditys = data.map(obj => obj.humidity);
+      var pressures = data.map(obj => obj.pressure);
+      var pluviometers = data.map(obj => obj.pluviometer);
+      var timestamps = data.map(obj => obj.timestamp);
+
+      UpdateGraph(chartT, timestamps, temps);
+      UpdateGraph(chartP, timestamps, pressures);
+      UpdateGraph(chartPluv, timestamps, pluviometers);
+      UpdateGraph(chartH, timestamps, humiditys);
+
+      })
     })
 
-    //Adicionar as ultimas leituras
-    onChildAdded(lastNReads,(snapshot) =>{
-      var jsonData = snapshot.toJSON(); //Puxa um json da base de dados?
-      //variáveis para salvar as leituras da base de dados
-      console.log(jsonData);
-      var temperature = jsonData.temperature;
-      var humidity = jsonData.humidity;
-      var pressure = jsonData.pressure;
-      var pluviometer= jsonData.pluviometer;
-      var timestamp = jsonData.timestamp;
+    lastNReads = query(lastReads,limitToLast(chartRange));
+    onValue(lastNReads, (snapshot)=>{
+      var jsonData = Object.values(snapshot.toJSON()); //puxa todos os valores de uma vez mas na forma de objeto
+      var data = [];
 
-      plotValues(chartT,timestamp, temperature);
-      plotValues(chartP,timestamp, pressure);
-      plotValues(chartPluv,timestamp, pluviometer);
-      plotValues(chartH,timestamp, humidity);
+      jsonData.forEach(element => {
+        data.push(element);
       });
+
+      var temps = data.map(obj => obj.temperature);
+      var humiditys = data.map(obj => obj.humidity);
+      var pressures = data.map(obj => obj.pressure);
+      var pluviometers = data.map(obj => obj.pluviometer);
+      var timestamps = data.map(obj => obj.timestamp);
+
+      UpdateGraph(chartT, timestamps, temps);
+      UpdateGraph(chartP, timestamps, pressures);
+      UpdateGraph(chartPluv, timestamps, pluviometers);
+      UpdateGraph(chartH, timestamps, humiditys);
+
+      })
+
+
   } else {
       auth.signOut();
       console.log("Não existe alguém conectado");
