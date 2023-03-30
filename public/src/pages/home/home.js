@@ -255,7 +255,7 @@ onAuthStateChanged(auth, (user) => {
 
       //valor que varia de acordo com a mudança no chart.
       lastNReads = query(lastReads,limitToLast(chartRange));
-      console.log(chartRange);
+
       //Deleta os charts para então refazê-los
       chartT.destroy();
       chartH.destroy();
