@@ -268,19 +268,6 @@ onAuthStateChanged(auth, (user) => {
       chartP=createPressureChart();
       chartPluv=createPluvChart();  
 
-<<<<<<< HEAD
-      //Adicionar as ultimas leituras
-      onChildAdded(lastNReads,(snapshot) =>{
-      var jsonData = snapshot.toJSON(); //Puxa um json da base de dados?
-      console.log(jsonData);
-      //variáveis para salvar as leituras da base de dados
-      var temperature = jsonData.temperature;
-      var humidity = jsonData.humidity;
-      var pressure = jsonData.pressure;
-      var pluviometer= jsonData.pluviometer;
-      var timestamp = jsonData.timestamp;
-=======
->>>>>>> 538416a5d76e095692aab7a5275ef180403b9fab
 
       //Adicionar as leituras
       onValue(lastNReads, (snapshot)=>{
@@ -305,22 +292,10 @@ onAuthStateChanged(auth, (user) => {
       })
     })
 
-<<<<<<< HEAD
-    //Adicionar as ultimas leituras
-    onChildAdded(lastNReads,(snapshot) =>{
-      var jsonData = snapshot.toJSON(); //Puxa um json da base de dados?
-      //variáveis para salvar as leituras da base de dados
-      var temperature = jsonData.temperature;
-      var humidity = jsonData.humidity;
-      var pressure = jsonData.pressure;
-      var pluviometer= jsonData.pluviometer;
-      var timestamp = jsonData.timestamp;
-
     lastNReads = query(lastReads,limitToLast(chartRange));
     onValue(lastNReads, (snapshot)=>{
       var jsonData = Object.values(snapshot.toJSON()); //puxa todos os valores de uma vez mas na forma de objeto
       var data = [];
-
 
       jsonData.forEach(element => {
         data.push(element);

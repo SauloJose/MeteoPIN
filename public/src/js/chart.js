@@ -178,7 +178,7 @@ export function createPluvChart() {
           series: [{
             name: 'Pluviômetro'
           }],
-          title: {  
+          title: { 
             style: {"color":"gray"},
             text: 'Pluviômetro'
           },    
