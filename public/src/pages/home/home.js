@@ -54,6 +54,11 @@ function epochToDateTime(epochTime){
   return dateTime;
 }
 
+function epochToDateTimeJS(epochTime){
+  var epochDate = new Date(epochToJsDate(epochTime));
+  return epochDate.getTime();
+}
+
 function epochToTime(epochTime){
   var epochDate = new Date(epochToJsDate(epochTime));
   var Time = ("00" + epochDate.getHours()).slice(-2) + ":" +
@@ -75,18 +80,18 @@ function plotValues(chart, timestamp, value, chartRange){
 }
 
 //função parar criar o gráfico de uma vez só vez, recuperando os valores.
-function UpdateGraph(chart, dataX, dataY){
-  var formattedTimestamps = dataX.map((timestamp) => {
-    return epochToDateTime(timestamp);
+function UpdateGraph(chart, dataX, dataY) {
+  var points = dataX.map(function (timestamp, i) {
+    return [(timestamp-10800)* 1000, dataY[i]];
   });
+
   chart.update({
     series: [{
-      data: dataY,
-      xAxis: 0,
-      yAxis: 0
+      data: points
     }],
     xAxis: {
-      categories: formattedTimestamps
+      type: 'datetime',
+      dateTimeLabelFormats: { second: '%H:%M:%S' }
     }
   });
 }
