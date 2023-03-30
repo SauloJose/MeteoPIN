@@ -255,6 +255,7 @@ onAuthStateChanged(auth, (user) => {
       //Adicionar as ultimas leituras
       onChildAdded(lastNReads,(snapshot) =>{
       var jsonData = snapshot.toJSON(); //Puxa um json da base de dados?
+      console.log(jsonData);
       //variáveis para salvar as leituras da base de dados
       var temperature = jsonData.temperature;
       var humidity = jsonData.humidity;
@@ -273,7 +274,6 @@ onAuthStateChanged(auth, (user) => {
     onChildAdded(lastNReads,(snapshot) =>{
       var jsonData = snapshot.toJSON(); //Puxa um json da base de dados?
       //variáveis para salvar as leituras da base de dados
-      console.log(jsonData);
       var temperature = jsonData.temperature;
       var humidity = jsonData.humidity;
       var pressure = jsonData.pressure;

@@ -78,53 +78,9 @@ onAuthStateChanged(auth, (user) => {
     //criando dados para a tabela
     var lastReadingTimestamp;
     
-    function createTable(){//Cria a tabela e atualiza ela.
-        var firstRun = true;
-        const dbRefOK =query(dbRef,orderByKey());
-        const Last100dbRefok = query(dbRefOK, limitToLast(100));
-        onChildAdded(Last100dbRefok, function(snapshot){
-            if(snapshot.exists()){
-                //dados do banco de dados
-                var jsonData = snapshot.toJSON();
-                console.log(jsonData)
-                var temperature = jsonData.temperature;
-                var humidity = jsonData.humidity;
-                var pressure = jsonData.pressure;
-                var pluviometer= jsonData.pluviometer;
-                var timestamp = jsonData.timestamp;
-
-                //conteúdo da tabela
-                var content='';
-                content += '<tr>';
-                content += '<td>' + epochToDateTime(timestamp) + '</td>';
-                content += '<td>' + temperature + '</td>';
-                content += '<td>' + humidity + '</td>';
-                content += '<td>' + pressure + '</td>';
-                content += '<td>' + pluviometer + '</td>';
-                content += '</tr>';
-
-                //utilizando jQuery para atualizar a tabela
-                $('#tbody').prepend(content);
-                if(firstRun){
-                    lastReadingTimestamp = timestamp;
-                    firstRun=false;
-                }
-            }
-        })
-
-        //Atualizando dado das ultimas leituras
-        const lastReads = query(dbRef, orderByKey());
-        const lastRead = query(lastReads, limitToLast(1));
-        onChildAdded(lastRead, (snapshot) => {
-            var jsonData = snapshot.toJSON();
-            var timestampT = jsonData.timestamp;  
-            lastUpdate.innerHTML=epochToDateTime(timestampT);
-        })
-    }
-
     //Sempre cria a tabela?
     //criando a tabela APENAS no momento em que a janela está carregando. Após isso, ela só atualiza quando clicado em mais dados.
-    createTable();
+    createTable(dbRef);
 
     //adicionar mais leituras a tabela
     function appendToTable(){
@@ -212,3 +168,46 @@ return dateTime;
 
 //Elementos do DOM para manipulação
 
+function createTable(dbRef){//Cria a tabela e atualiza ela.
+  var firstRun = true;
+  const dbRefOK =query(dbRef,orderByKey());
+  const Last100dbRefok = query(dbRefOK, limitToLast(100));
+  onChildAdded(Last100dbRefok, function(snapshot){
+      if(snapshot.exists()){
+          //dados do banco de dados
+          var jsonData = snapshot.toJSON();
+          console.log(jsonData)
+          var temperature = jsonData.temperature;
+          var humidity = jsonData.humidity;
+          var pressure = jsonData.pressure;
+          var pluviometer= jsonData.pluviometer;
+          var timestamp = jsonData.timestamp;
+
+          //conteúdo da tabela
+          var content='';
+          content += '<tr>';
+          content += '<td>' + epochToDateTime(timestamp) + '</td>';
+          content += '<td>' + temperature + '</td>';
+          content += '<td>' + humidity + '</td>';
+          content += '<td>' + pressure + '</td>';
+          content += '<td>' + pluviometer + '</td>';
+          content += '</tr>';
+
+          //utilizando jQuery para atualizar a tabela
+          $('#tbody').prepend(content);
+          if(firstRun){
+              lastReadingTimestamp = timestamp;
+              firstRun=false;
+          }
+      }
+  })
+
+  //Atualizando dado das ultimas leituras
+  const lastReads = query(dbRef, orderByKey());
+  const lastRead = query(lastReads, limitToLast(1));
+  onChildAdded(lastRead, (snapshot) => {
+      var jsonData = snapshot.toJSON();
+      var timestampT = jsonData.timestamp;  
+      lastUpdate.innerHTML=epochToDateTime(timestampT);
+  })
+}
