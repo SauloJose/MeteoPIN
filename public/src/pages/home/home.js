@@ -68,31 +68,12 @@ function epochToTime(epochTime){
   return Time;
 }
 
-//função para plotar valores nos gráficos de forma individual
-function plotValues(chart, timestamp, value, chartRange){
-  var x = epochToTime(timestamp-10800).getTime();
-  var y = Number(value);
-  if(chart.series[0].data.length >chartRange){
-    chart.series[0].addPoint([x,y],true,true,true);
-  }else{
-    chart.series[0].addPoint([x,y],true,false,true);
-  }
-}
-
 //função parar criar o gráfico de uma vez só vez, recuperando os valores.
-function UpdateGraph(chart, dataX, dataY) {
-  var points = dataX.map(function (timestamp, i) {
-    return [(timestamp-10800)* 1000, dataY[i]];
-  });
-
+function UpdateGraph(chart, points) {
   chart.update({
     series: [{
-      data: points
+      data: points.map(point => [epochToDateTimeJS(point[0]-10800), point[1]])
     }],
-    xAxis: {
-      type: 'datetime',
-      dateTimeLabelFormats: { second: '%H:%M:%S' }
-    }
   });
 }
 
@@ -236,21 +217,23 @@ onAuthStateChanged(auth, (user) => {
     //Aqui tem um "ouvinte" para puxar a ultima leitura.
     onChildAdded(lastRead, (snapshot) => {
       var jsonData = snapshot.toJSON();
-
+    
       //Dados do Json
-      var temperatureT = jsonData.temperature;
-      var humidityT = jsonData.humidity;
-      var pressureT = jsonData.pressure;
-      var pluviometerT= jsonData.pluviometer;
-      var timestampT = jsonData.timestamp;
-
+      var temperatureT = parseFloat(jsonData.temperature).toFixed(2);
+      var humidityT = parseFloat(jsonData.humidity).toFixed(3);
+      var pressureT = parseFloat(jsonData.pressure).toFixed(2);
+      var pluviometerT = parseFloat(jsonData.pluviometer).toFixed(2);
+      var timestampT = parseFloat(jsonData.timestamp);
+    
       //Modificando valores no document.
       tempData.innerHTML= `${temperatureT} °C`;
       humData.innerHTML = `${humidityT} %`;
       pressData.innerHTML=`${pressureT} hPa`;
       pluvioData.innerHTML=`${pluviometerT} mm`;
       lastUpdate.innerHTML=epochToDateTime(timestampT);
-    })   
+
+      localStorage.setItem('lastUpdate',timestampT);
+    })  
 
     
     //atualizar dados do gráfico de acordo com o range no banco
@@ -275,49 +258,53 @@ onAuthStateChanged(auth, (user) => {
 
 
       //Adicionar as leituras
-      onValue(lastNReads, (snapshot)=>{
-      var jsonData = Object.values(snapshot.toJSON()); //puxa todos os valores de uma vez mas na forma de objeto
-      var data = [];
-
-      jsonData.forEach(element => {
-        data.push(element);
+      onValue(lastNReads, (snapshot) => {
+        var jsonData = Object.values(snapshot.toJSON());
+        var data = jsonData.map(obj => {
+          return {
+            temperature: Number(obj.temperature),
+            humidity: Number(obj.humidity),
+            pressure: Number(obj.pressure),
+            pluviometer: Number(obj.pluviometer),
+            timestamp: Number(obj.timestamp)
+          };
+        });
+      
+        var temps = data.map(obj => [obj.timestamp, obj.temperature]);
+        var humiditys = data.map(obj => [obj.timestamp, obj.humidity]);
+        var pressures = data.map(obj => [obj.timestamp, obj.pressure]);
+        var pluviometers = data.map(obj => [obj.timestamp, obj.pluviometer]);
+      
+        UpdateGraph(chartT, temps);
+        UpdateGraph(chartP, pressures);
+        UpdateGraph(chartPluv, pluviometers);
+        UpdateGraph(chartH, humiditys);
       });
-
-      var temps = data.map(obj => obj.temperature);
-      var humiditys = data.map(obj => obj.humidity);
-      var pressures = data.map(obj => obj.pressure);
-      var pluviometers = data.map(obj => obj.pluviometer);
-      var timestamps = data.map(obj => obj.timestamp);
-
-      UpdateGraph(chartT, timestamps, temps);
-      UpdateGraph(chartP, timestamps, pressures);
-      UpdateGraph(chartPluv, timestamps, pluviometers);
-      UpdateGraph(chartH, timestamps, humiditys);
-
-      })
     })
 
     lastNReads = query(lastReads,limitToLast(chartRange));
-    onValue(lastNReads, (snapshot)=>{
-      var jsonData = Object.values(snapshot.toJSON()); //puxa todos os valores de uma vez mas na forma de objeto
-      var data = [];
-
-      jsonData.forEach(element => {
-        data.push(element);
+    onValue(lastNReads, (snapshot) => {
+      var jsonData = Object.values(snapshot.toJSON());
+      var data = jsonData.map(obj => {
+        return {
+          temperature: Number(obj.temperature),
+          humidity: Number(obj.humidity),
+          pressure: Number(obj.pressure),
+          pluviometer: Number(obj.pluviometer),
+          timestamp: Number(obj.timestamp)
+        };
       });
-
-      var temps = data.map(obj => obj.temperature);
-      var humiditys = data.map(obj => obj.humidity);
-      var pressures = data.map(obj => obj.pressure);
-      var pluviometers = data.map(obj => obj.pluviometer);
-      var timestamps = data.map(obj => obj.timestamp);
-
-      UpdateGraph(chartT, timestamps, temps);
-      UpdateGraph(chartP, timestamps, pressures);
-      UpdateGraph(chartPluv, timestamps, pluviometers);
-      UpdateGraph(chartH, timestamps, humiditys);
-
-      })
+    
+      var temps = data.map(obj => [obj.timestamp, obj.temperature]);
+      var humiditys = data.map(obj => [obj.timestamp, obj.humidity]);
+      var pressures = data.map(obj => [obj.timestamp, obj.pressure]);
+      var pluviometers = data.map(obj => [obj.timestamp, obj.pluviometer]);
+    
+      UpdateGraph(chartT, temps);
+      UpdateGraph(chartP, pressures);
+      UpdateGraph(chartPluv, pluviometers);
+      UpdateGraph(chartH, humiditys);
+    });
 
 
   } else {
