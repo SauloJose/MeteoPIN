@@ -25,7 +25,9 @@ import{
   orderByChild,
   query,
   limitToLast,
-  endAt
+  endAt,
+  startAt,
+  limitToFirst
 } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js';
 
 
@@ -69,17 +71,16 @@ return dateTime;
 function createTable(dbRef) {
   return new Promise((resolve, reject) => {
     const dbRefOK = query(dbRef, orderByKey());
-    const last50dbRefOK = query(dbRefOK, limitToLast(50));
+    const last50dbRefOK = query(dbRefOK, limitToLast(100));
     const lastReadRef = query(dbRefOK, limitToLast(1));
 
     var lastReadingTimestamp; // Valor da última leitura na tabela
     var dataList = [];
     var lastTableUpdateTimestamp; // Último valor exibido na tabela
 
-    // Lê os últimos 50 registros do banco de dados apenas uma vez
+    // Lê os últimos 50 registros do banco de dados apenas uma vez //Irá atualizar de uma só vez?
     onValue(last50dbRefOK, (snapshot) => {
       const reversedList = []; // salva as leituras atuais em ordem inversa
-
       snapshot.forEach((childSnapshot) => {
         const jsonData = childSnapshot.toJSON();
 
@@ -91,7 +92,6 @@ function createTable(dbRef) {
       //reverte a ordem das leituras atuais
       reversedList.reverse();
       lastTableUpdateTimestamp = dataList[0].timestamp;
-      console.log(epochToDateTime(lastTableUpdateTimestamp));
 
       //insere as leituras atuais na tabela em lotes (batch)
       const batchContent = reversedList.map((element) => {
@@ -115,17 +115,18 @@ function createTable(dbRef) {
       if (dataList.length > 0) {
         lastReadingTimestamp = reversedList[0].timestamp;
         lastUpdate.innerHTML = epochToDateTime(lastReadingTimestamp);
-        console.log(epochToDateTime(lastReadingTimestamp));
+        //console.log(epochToDateTime(lastReadingTimestamp));
       }
 
       //resolve a Promise com o valor de lastTableUpdateTimestamp
+      console.log("A variável que foi retornada pela createTable:"+String(lastTableUpdateTimestamp))
       resolve(lastTableUpdateTimestamp);
     }, (error) => {
       //rejeita a Promise se houver algum erro
       reject(error);
     });
 
-    //atualiza o timestamp da última leitura no banco de dados
+    //atualiza o timestamp da leitura mais recente no banco de dados
     onChildAdded(lastReadRef, (snapshot) => {
       lastReadingTimestamp = snapshot.val().timestamp;
       lastUpdate.innerHTML = epochToDateTime(lastReadingTimestamp);
@@ -133,69 +134,66 @@ function createTable(dbRef) {
   });
 }
 
-
-
 //Função para adicionar mais dados
 async function appendToTable(dbRef, lastTableUpdate) {
-  try {
-    const queryRef = query(
-      dbRef,
-      orderByChild("timestamp"),
-      endAt(lastTableUpdate - 1, "timestamp"),
-      limitToLast(50)
-    );
+  const queryOk = query(dbRef, orderByKey());
+  const queryRef = query(
+    queryOk,
+    endAt(String(lastTableUpdate - 1)),
+    limitToLast(50)
+  );
 
-    const snapshot = await get(queryRef);
+  //Toma um get instantâneo dos dados para colocar no appendToTable
+  const snapshot = await get(queryRef);
 
-    const reversedList = [];
-    const dataList = [];
+    try {
+      const reversedList = [];
+      const dataList = [];
 
-    snapshot.forEach((childSnapshot) => {
-      const jsonData = childSnapshot.toJSON();
-      reversedList.push(jsonData);
-      dataList.push(jsonData);
-    });
+      snapshot.forEach((childSnapshot) => {
+        const jsonData = childSnapshot.toJSON();
+        reversedList.push(jsonData);
+        dataList.push(jsonData);
+      });
 
-    reversedList.reverse();
+      reversedList.reverse();
 
-    const batchContent = reversedList
-      .map((element) => {
-        const { temperature, humidity, pressure, pluviometer, timestamp } =
-          element;
+      const batchContent = reversedList
+        .map((element) => {
+          const { temperature, humidity, pressure, pluviometer, timestamp } =
+            element;
 
-        let content = "";
-        content += "<tr>";
-        content += "<td>" + epochToDateTime(timestamp) + "</td>";
-        content += "<td>" + temperature + "</td>";
-        content += "<td>" + humidity + "</td>";
-        content += "<td>" + pressure + "</td>";
-        content += "<td>" + pluviometer + "</td>";
-        content += "</tr>";
-        return content;
-      })
-      .join("");
+          let content = "";
+          content += "<tr>";
+          content += "<td>" + epochToDateTime(timestamp) + "</td>";
+          content += "<td>" + temperature + "</td>";
+          content += "<td>" + humidity + "</td>";
+          content += "<td>" + pressure + "</td>";
+          content += "<td>" + pluviometer + "</td>";
+          content += "</tr>";
+          return content;
+        })
+        .join("");
 
-    $("#tbody").append(batchContent);
+      $("#tbody").append(batchContent);
 
-    // Extrai o último timestamp do snapshot retornado
-    var lastTimestamp;
+      // Extrai o último timestamp do snapshot retornado
+      var lastTimestamp;
+      
+      lastTimestamp = dataList[0].timestamp;
 
-    if (snapshot && snapshot.size > 0) {
-      lastTimestamp = snapshot.docs[snapshot.size - 1].data().timestamp;
-    } else {
-      lastTimestamp = lastTableUpdate;
+      return lastTimestamp; // retorna o último timestamp
+
+    } catch (error) {
+      console.error(error);
+      return -1;
     }
-
-    return lastTimestamp; // retorna o último timestamp
-  } catch (error) {
-    console.error(error);
-    return 0;
-  }
 }
+
 
 /*===================== INTERFACE DO USUÁRIO ===================================== */
 //verifica se o usuário está logado ou não.
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (user) {
     // Extrai o uid do objeto user utilizando a sintaxe de desestruturação
     const { uid } = user;
@@ -228,26 +226,37 @@ onAuthStateChanged(auth, (user) => {
 
     // Sempre cria a tabela?
     // Criando a tabela APENAS no momento em que a janela está carregando. Após isso, ela só atualiza quando clicado em mais dados.
-    lastReadingTimestamp = createTable(dbRef, lastReadingTimestamp);
+    lastReadingTimestamp = await createTable(dbRef, lastReadingTimestamp);
 
-    lastReadingTimestamp.then((value) => {//Resolvendo a promisse
-      lastReadingTimestampValue = value;
-      console.log(lastReadingTimestampValue);
-    
-      // Adicionar mais leituras a tabela
-      // Adicionar um evento de clique
-      moreDataBTN.addEventListener("click", async () => {
-        moreDataInfo.innerHTML = "Carregando...";
-        moreDataBTN.disabled = true;
+    lastReadingTimestampValue = lastReadingTimestamp;
+    //console.log(epochToDateTime(lastReadingTimestampValue));
+
+    // Adicionar mais leituras a tabela
+    // Adicionar um evento de clique
+    moreDataBTN.addEventListener("click", async () => {
+      moreDataInfo.innerHTML = "Carregando...";
+
+      moreDataBTN.disabled = true;
+      
+      if (lastReadingTimestampValue) {
         lastReadingTimestampValue = await appendToTable(dbRef, lastReadingTimestampValue);
+        //console.log(epochToDateTime(lastReadingTimestampValue))
+      } else { //Provavelmente gerará um bug.
+        lastReadingTimestampValue = await createTable(dbRef);
+      }
+      
+      if(lastReadingTimestampValue == -1){
+        moreDataInfo.innerHTML = "Provavelmente não tem mais dados.";
+        moreDataBTN.disabled = false;
+      }else{
         moreDataInfo.innerHTML = "";
         moreDataBTN.disabled = false;
-      });
+      }
     });
+    
 
   } else {
     console.log("Não existe alguém conectado");
     window.location.href = "../../../index.html";
   }
 });
-
