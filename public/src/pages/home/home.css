@@ -77,6 +77,10 @@ body{
     grid-template-columns: 14rem auto 23rem;
 }
 
+main #header{
+    margin: 1.6rem;
+}
+
 a{
     color: var(--color-dark);
 }
@@ -446,7 +450,7 @@ main .insights  label > div small{
 /*Manipular range dos charts*/
 div#manipulateRange{
     font-size: 0.8rem;
-    margin: 0.5rem;
+    margin: 2rem;
 }
 
 div#manipulateRange > small{

@@ -108,6 +108,12 @@ let chartH;
 let chartP;
 let chartPluv;
 
+
+window.onresize = function(){
+  location.reload();
+};
+
+
 //criará os charts quando a pagina web carregar
 window.addEventListener('load', ()=>{
   //Criando os objetos charts
