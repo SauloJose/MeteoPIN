@@ -1,6 +1,6 @@
 //Funções para criar os chats
 // Create Temperature Chart
-export function createTemperatureChart() {
+export function createTemperatureChart(color) {
   var chart = new Highcharts.Chart({
     chart:{ 
       renderTo:'TempChart',
@@ -13,15 +13,18 @@ export function createTemperatureChart() {
       }
     ],
     title: { 
-      style: {"color":"gray"},
+      style: {"color":color},
       text: 'Temperatura'
     },
     plotOptions: {
       line: { 
         animation: false,
         dataLabels: { 
-          enabled: true 
+          enabled: true,
+          style: {"color":"#e0e0e0"}
         }
+      },series: { 
+        color: '#41f1b6' 
       }
     },
     xAxis: {
@@ -30,7 +33,11 @@ export function createTemperatureChart() {
     },
     yAxis: {
       title: { 
-        text: 'Temperatura (°C)' 
+        text: 'Temperatura (°C)',
+        style: {"color":color}  
+      },
+      labels: {
+        style: {"color":color} // Definindo a cor dos labels do eixo Y como um tom de cinza claro
       }
     },
     credits: { 
@@ -55,7 +62,7 @@ export function createTemperatureChart() {
 }
 
 // Create Humidity Chart
-export function createHumidityChart(){
+export function createHumidityChart(color ='#e0e0e0'){
   var chart = new Highcharts.Chart({
     chart:{ 
       renderTo:'HumChart',
@@ -66,18 +73,18 @@ export function createHumidityChart(){
       name: 'BME280'
     }],
     title: {
-      style: {"color":"gray"},
+      style: {"color":color},
       text: 'Umidade'
     },    
     plotOptions: {
       line: { 
         animation: false,
         dataLabels: { 
-          enabled: true 
+          enabled: true,
+          style: {"color":"#e0e0e0"}
         }
-      },
-      series: { 
-        color: '#50b8b4' 
+      },series: { 
+        color: '#DCE1EB' 
       }
     },
     xAxis: {
@@ -86,7 +93,11 @@ export function createHumidityChart(){
     },
     yAxis: {
       title: { 
-        text: 'Umidade (%)' 
+        text: 'Pressão (hPa)',
+        style: {"color": color} // Usando a cor passada como parâmetro
+      },
+      labels: {
+        style: {"color": color} // Usando a cor passada como parâmetro
       }
     },
     credits: { 
@@ -111,7 +122,7 @@ export function createHumidityChart(){
 }
 
 // Create Pressure Chart
-export function createPressureChart() {
+export function createPressureChart(color ='#e0e0e0') {
   var chart = new Highcharts.Chart({
     chart:{ 
       renderTo:'PressChart',
@@ -122,18 +133,18 @@ export function createPressureChart() {
       name: 'BME280'
     }],
     title: { 
-      style: {"color":"gray"},
+      style: {"color": color}, // Usando a cor passada como parâmetro
       text: 'Pressão'
     },    
     plotOptions: {
       line: { 
         animation: false,
         dataLabels: { 
-          enabled: true 
+          enabled: true,
+          style: {"color":"#e0e0e0"}// Usando a cor passada como parâmetro
         }
-      },
-      series: { 
-        color: '#A62639' 
+      },series: { 
+        color: '#7380ec' // Usando a cor passada como parâmetro
       }
     },
     xAxis: {
@@ -142,7 +153,11 @@ export function createPressureChart() {
     },
     yAxis: {
       title: { 
-        text: 'Pressão (hPa)' 
+        text: 'Pressão (hPa)',
+        style: {"color": color} // Usando a cor passada como parâmetro
+      },
+      labels: {
+        style: {"color": color} // Usando a cor passada como parâmetro
       }
     },
     credits: { 
@@ -161,14 +176,15 @@ export function createPressureChart() {
               }
           }
       }]
-  }
+    }
   });
   return chart;
 }
 
 
+
   // Criando chart para o pluviômetro
-export function createPluvChart() {
+export function createPluvChart(color ='#e0e0e0') {
       var chart = new Highcharts.Chart({
         chart:{ 
           renderTo:'PluvChart',
@@ -179,18 +195,18 @@ export function createPluvChart() {
           name: 'Pluviômetro'
         }],
         title: { 
-          style: {"color":"gray"},
+          style: {"color":color},
           text: 'Pluviômetro'
         },    
         plotOptions: {
           line: { 
             animation: false,
             dataLabels: { 
-              enabled: true 
+              enabled: true,
+              style: {"color":"#e0e0e0"}
             }
-          },
-          series: { 
-            color: '#A62639' 
+          },series: { 
+            color: '#ff7782' 
           }
         },
         xAxis: {
@@ -199,7 +215,11 @@ export function createPluvChart() {
         },
         yAxis: {
           title: { 
-            text: 'nível de água (mm)' 
+            text: 'Pluviômetro (mm)',
+            style: {"color":color} // Definindo a cor do título do eixo Y como um tom de cinza claro
+          },
+          labels: {
+            style: {"color":color} // Definindo a cor dos labels do eixo Y como um tom de cinza claro
           }
         },
         credits: { 

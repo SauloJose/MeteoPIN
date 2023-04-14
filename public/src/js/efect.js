@@ -40,6 +40,7 @@ window.addEventListener('load', function(){
     }else{
         //por padrão, deixa como light
         localStorage.setItem('theme','light');
+        localStorage.setItem('color','#202528');
     }
 });
 
@@ -65,10 +66,13 @@ themeToggler.addEventListener('click',()=>{
     //Se  esse primeiro estiver ativo -> tema claro 
     if(themeToggler.querySelector('span:nth-child(1)').classList.contains('active')){
         //salva a informação do tema como light
+
         localStorage.setItem('theme','light');
+        localStorage.setItem('color','#7d8da1')
     }else{
         //salva a informação do tema como dark
         localStorage.setItem('theme','dark');
+        localStorage.setItem('color','#e0e0e0')
     }
 
 })

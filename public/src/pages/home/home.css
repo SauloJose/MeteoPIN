@@ -9,14 +9,17 @@
     --color-sucess: #41f1b6;
     --color-warning: #ffbb55;
     --color-white: #fff;
+    --color-chart: #ffffff;
+    --color-white-menu: #202528;
     --color-info-dark: #7d8da1;
     --color-info-light: #dce1eb;
-    --color-dark: #363949;
+    --color-dark: #2c2e3a;
     --color-light: rgba(132,139,200,0.18);
     --color-primary-variant: #111e88;
     --color-dark-variant: #677483;
     --color-background: #f6f6f9;
     --color-purple: rgb(160,99,245);
+    --color-a-menu: #2c2e3a;
 
     --card-border-radius: 2rem;
     --border-radius-1: 0.4rem;
@@ -35,12 +38,15 @@
 /* Variáveis do tema escuro */
 .dark-theme-variables{
     --color-ok-variant: #122a30;
-    --color-background: #181a1e;
-    --color-white: #202528;
+    --color-chart: #202528b2;
+    --color-white: #20252891;
     --color-dark: #edeffd;
     --color-dark-variant: #a3bdcc;
+    --color-a-menu: rgb(218, 210, 210);
     --color-light: rgba(0,0,0,0.4);
     --box-shadow: 0 2rem 3rem var(--color-light);
+
+    background-image: url("../../assets/back2.png");
 }
 
 
@@ -203,7 +209,7 @@ aside h3{
 
 aside .sidebar a{
     display: flex;
-    color: var(--color-info-dark);
+    color: var(--color-a-menu);
     margin-left: 2rem;
     gap: 1rem;
     align-items: center;
@@ -421,6 +427,7 @@ main .insights  label > div small{
 /* Atualizações recentes*/
 .right .recent-updates{
     margin-top: 1rem;
+    margin-left: 1.2rem;
 }
 
 .right .recent-updates h2{
@@ -676,7 +683,7 @@ main section.graphs{
 
 /* ===== CANVAS ====*/
 div.ChartData{ /*Estilo dos gráficos*/
-    background: var(--color-white);
+    background: var(--color-chart);
     max-width: 100%;
     margin-top: 0rem;
     width: 100%;

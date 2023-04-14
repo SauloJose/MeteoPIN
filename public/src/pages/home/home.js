@@ -117,10 +117,10 @@ window.onresize = function(){
 //criará os charts quando a pagina web carregar
 window.addEventListener('load', ()=>{
   //Criando os objetos charts
-  chartT=createTemperatureChart();
-  chartH=createHumidityChart();
-  chartP=createPressureChart();
-  chartPluv=createPluvChart();
+  chartT=createTemperatureChart(localStorage.color);
+  chartH=createHumidityChart(localStorage.color);
+  chartP=createPressureChart(localStorage.color);
+  chartPluv=createPluvChart(localStorage.color);
 
   //Analisando qual modo de execução
   if(window.innerWidth > 1330){//modo computador
@@ -257,10 +257,10 @@ onAuthStateChanged(auth, (user) => {
       chartPluv.destroy();
 
       //gerar novos charts para mostrar o novo intervalo de dados
-      chartT=createTemperatureChart();
-      chartH=createHumidityChart();
-      chartP=createPressureChart();
-      chartPluv=createPluvChart();  
+      chartT=createTemperatureChart(localStorage.color);
+      chartH=createHumidityChart(localStorage.color);
+      chartP=createPressureChart(localStorage.color);
+      chartPluv=createPluvChart(localStorage.color);  
 
 
       //Adicionar as leituras
