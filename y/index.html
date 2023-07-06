@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> MeteoPIN - LogIn </title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+    rel="stylesheet">
+    <link rel="stylesheet" href="./src/css/geral.css">
+    <link rel="stylesheet" href="login.css">
+    <link rel="shortcut icon" href="./src/assets/logo.png" type="image/x-icon">
+</head>
+<body>
+    <img src="./src/assets/back.png" class="wave">
+    <div class="container">
+        <div id="space">   </div>
+        <div class="login-container">
+            <form  action="index.html" id="login-form">
+                <div id="logoInfos">
+                    <div id="logoImg"><img src="./src/assets/logo.png" class="avatar"></div>
+                    <h2> Bem vindo! </h2>
+                </div>
+
+                <div class="input-div one">
+                    <i class="material-icons-sharp"> person </i>
+                    <div id="email-logIn">
+                        <h5> Email </h5>
+                        <input type="email" autocomplete="username" class="login-input" id="input-email" required>
+                    </div>
+                </div>
+                <div class="input-div two">
+                    <i class="material-icons-sharp"> lock </i>
+                    <div id="password-logIn">
+                        <h5> Senha </h5>
+                        <input type="password" autocomplete="current-password" class="login-input" id="input-password" required>
+                    </div>
+                </div>
+                <a href="#" class="resetPassword" id="recovPass"> Esqueceu a senha?</a>
+                
+                <div id="loginError">
+                    <h5 class="error-message" id="error-message"></h5>
+                </div>
+
+                <p><input type="submit" class="sigInBtn" value="Login"></p>
+                <div class="perData">
+                    <input type="checkbox" name="perDataCheck" >
+                    <label for="perDataCheck"> Deseja manter-se conectado?</label>
+                </div>
+                <div id="sigIn"> Você é novo por aqui? <a href="./src/pages/register/register.html"> Cadastre-se </a></div>
+            </form>
+        </div>
+    </div>
+    <script src="index.js" type="module"></script>
+    <script type="module" src="./src/js/auth.js"></script>
+    <script type="module" src="./src/js/app.js"></script>
+</body>
+</html>

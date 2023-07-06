@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,500;0,700;0,900;1,700&display=swap');
 
 /* Variáveis para signUp*/
-:root{
+:root {
     --color-name: #2560b9;
     --color-primary: #7380ec;
     --color-danger: #ff7782;
@@ -11,7 +11,7 @@
     --color-info-dark: #7d8da1;
     --color-info-light: #dce1eb;
     --color-dark: #363949;
-    --color-light: rgba(132,139,200,0.18);
+    --color-light: rgba(132, 139, 200, 0.18);
     --color-primary-variant: #111e88;
     --color-dark-variant: #677483;
     --color-background: #f6f6f9;
@@ -32,7 +32,7 @@
 }
 
 
-body{
+body {
     width: 100vw;
     height: 100vh;
     font-family: 'Poppins', sans-serif;
@@ -43,7 +43,7 @@ body{
     color: var(--color-dark);
 }
 
-.container{
+.container {
     background-image: url('../../assets/back2.png');
     background-position: center;
     display: flex;
@@ -54,10 +54,18 @@ body{
 }
 
 
+#logoImg img {
+    width: 1vw;
+    min-width: 60px;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+}
 
 .signUp-container {
     background: var(--color-white);
-    width: 40rem;
+    width: 80%;
+    max-width: 40rem;
     height: auto;
     display: flex;
     justify-content: center;
@@ -66,29 +74,29 @@ body{
     box-shadow: var(--box-shadow);
 }
 
-div#space{
+div#space {
     width: 70vw;
 }
 
-form{
+form {
     margin: 4rem;
     width: 20vw;
     justify-content: center;
     text-align: center;
 }
 
-form h2{
+form h2 {
     font-size: 2.9rem;
     text-transform: uppercase;
     margin: 2rem 0;
     color: #333;
 }
 
-div#logoInfos{
+div#logoInfos {
     margin-bottom: 2rem;
 }
 
-.input-div{
+.input-div {
     position: relative;
     display: grid;
     grid-template-columns: 7% 93%;
@@ -97,17 +105,18 @@ div#logoInfos{
     border-bottom: 2px solid var(--color-dark-variant);
 }
 
-.input-div.focus .material-icons-sharp i{
+.input-div.focus .material-icons-sharp i {
     color: var(--color-purple);
-    
+
 }
 
-.input-div.focus div h5{
+.input-div.focus div h5 {
     top: -0.8rem;
     font-size: 1.2rem;
 }
 
-.input-div::after, .input-div::before{
+.input-div::after,
+.input-div::before {
     content: '';
     position: absolute;
     bottom: -0.2rem;
@@ -117,37 +126,39 @@ div#logoInfos{
     transition: .3s;
 }
 
-.input-div::after{
+.input-div::after {
     right: 50%;
 }
-.input-div::before{
+
+.input-div::before {
     left: 50%;
 }
 
-.input-div.focus::after, .input-div.focus::before{
+.input-div.focus::after,
+.input-div.focus::before {
     width: 50%;
     background-color: var(--color-purple);
 }
 
-.input-div.one{
+.input-div.one {
     margin-top: 1rem;
 }
 
-.input-div.two{
+.input-div.two {
     margin-bottom: 0.4rem;
 }
 
-.material-icons-sharp i{
+.material-icons-sharp i {
     color: #d9d9d9;
     transition: .3s;
 }
 
-.input-div > div{
+.input-div>div {
     position: relative;
     height: 2.4rem;
 }
 
-.input-div > div > h5{
+.input-div>div>h5 {
     position: absolute;
     left: 0.8rem;
     top: 50%;
@@ -157,7 +168,7 @@ div#logoInfos{
     transition: .3s;
 }
 
-.signUp-input{
+.signUp-input {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -167,12 +178,12 @@ div#logoInfos{
     outline: none;
     background: none;
     padding: 0.5rem 0.7rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: #555;
-    font-family: 'Poppins',sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
-.resetPassword{
+.resetPassword {
     text-align: right;
     text-decoration: none;
     color: #999;
@@ -180,48 +191,48 @@ div#logoInfos{
     transform: .3s;
 }
 
-a{
+a {
     font-size: 1rem;
     transform: .3s;
 }
 
-a.resetPassword:hover{
+a.resetPassword:hover {
     color: #033625
 }
 
-a:hover{
-    color: rgb(204, 0, 255) ;
+a:hover {
+    color: rgb(204, 0, 255);
 }
 
-div #signUp{
+div #signUp {
     color: var(--color-info-dark);
     margin-top: 2.4rem;
     font-size: 1rem;
     transform: .3s;
 }
 
-div #recovPass{
+div #recovPass {
     display: block;
 }
 
 
-#logo{
+#logo {
     position: relative;
     text-align: center;
     justify-content: center;
 
 }
 
-.signUpBtn{
+.signUpBtn {
     display: center;
-    width: 50%;
-    height: 50px;
+    width: 35%;
+    height: 40px;
     border-radius: 1rem;
     margin: 2.0rem 0;
-    font-size: 1.4rem;
+    font-size: 1rem;
     outline: none;
     border: none;
-    background-image: linear-gradient(to right, #6a23b5, #640094,#6a23b5);
+    background-image: linear-gradient(to right, #6a23b5, #640094, #6a23b5);
     cursor: pointer;
     color: #fff;
     background-size: 200%;
@@ -229,56 +240,55 @@ div #recovPass{
     transition: .4s;
 }
 
-#signUpError h5{
+#signUpError h5 {
     color: var(--color-danger);
     font-size: 8pt;
 }
-.signUpBtn:hover{
+
+.signUpBtn:hover {
     background: right #640094;
 }
 
-div #perData{
+div #perData {
     display: block;
     margin: 0;
 }
 
-div #perdata > input {
+div #perdata>input {
     display: block;
 }
 
-.logo{
+.logo {
     display: flex;
     gap: 0.8rem;
 }
 
-.logo img{
+.logo img {
     width: 2rem;
     height: 2rem;
 }
 
 
-div#logoInfos{
+div#logoInfos {
     margin-bottom: 2rem;
 }
 
-@media screen and (max-width: 1300px){
+@media screen and (max-width: 1300px) {}
 
-}
-
-@media screen and (max-width: 1250px){
-    form h2{
+@media screen and (max-width: 1250px) {
+    form h2 {
         font-size: 2.8rem;
         margin: 0.5rem 0;
     }
 
 }
 
-@media screen and (max-width: 1206px){
-    form{
+@media screen and (max-width: 1206px) {
+    form {
         width: 290px;
     }
 
-    .signUp-container{
+    .signUp-container {
         margin-top: -5rem;
         justify-content: center;
     }

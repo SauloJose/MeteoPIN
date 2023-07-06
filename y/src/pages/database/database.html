@@ -5,20 +5,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> MeteoPIN - Home page</title>
+    <title> MeteoPIN - Base de Dados </title>
     <!-- MATERIAL ICON-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <!-- ESTILOS-->
+    <link rel="stylesheet" href="database.css">
     <link rel="shortcut icon" href="../../../src/assets/logo.png" type="image/x-icon">
     <!-- Conteúdos do firebase -->
     <!-- include highchartsjs to build the charts-->
     <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <!-- include to use jquery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="home.css">
 
 </head>
 
@@ -35,11 +34,11 @@
                 </div>
             </div>
             <div class="sidebar">
-                <a href="../home/home.html" class="active">
+                <a href="../home/home.html">
                     <span class="material-icons-sharp"> dashboard</span>
                     <h3> Painel de Controle </h3>
                 </a>
-                <a href="../database/database.html">
+                <a href="../database/database.html" class="active">
                     <span class="material-icons-sharp"> storage</span>
                     <h3> Base de dados </h3>
                 </a>
@@ -71,72 +70,32 @@
 
         <main>
             <div id="header">
-                <h1> > Painel de Controle </h1>
-                <p> Bem vindo de volta, <b class="nickName"> ... </b>!</p>
+                <h1> > Base de Dados </h1>
+                <br><br>
+                <small class="text-muted"> Abaixo contém uma tabela com as 100 ultimas leituras.</small>
+                <small class="text-muted">Você pode obter mais leituras clicando no botão "mais dados".</small>
             </div>
+            <div class="insights">
+                <div id="table-container">
 
-            <div id="cards">
-                <div id="radios" style="display: none">
-                    <input type="radio" name="state" id="state1" class="radioState" checked>
-                    <input type="radio" name="state" id="state2" class="radioState">
-                    <input type="radio" name="state" id="state3" class="radioState">
-                    <input type="radio" name="state" id="state4" class="radioState">
-                </div>
-                <div class="insights" id="cardsEfect">
-                    <label for="state1" class="labelCard">
-                        <div class="temp card" id="temp">
-                            <span class="material-icons-sharp"> thermostat</span>
-                            <h3> Temperatura (°C) </h3>
-                            <h1 class="middle" id="tempData"> ... </h1>
-                            <small class="text-muted"> Tempo real</small>
-                        </div>
-                    </label>
-                    <!-- FIM DA TEMPERATURA-->
+                    <table id="readings-table">
+                        <tr id="theader">
+                            <th>Instante</th>
+                            <th> Temp (°C)</th>
+                            <th> Hum (%)</th>
+                            <th> Press (hPa)</th>
+                            <th> Pluv (mm) </th>
+                        </tr>
+                        <tbody id="tbody">
 
-                    <label for="state2" class="labelCard">
-                        <div class="press card" id="press">
-                            <span class="material-icons-sharp"> tire_repair </span>
-                            <h3> Pressão (hPa) </h3>
-                            <h1 id="pressData" class="middle"> ... </h1>
-                            <small class="text-muted"> Tempo real </small>
-                        </div>
-                    </label>
-                    <!-- FIM DA PRESSÃO-->
-
-                    <label for="state3" class="labelCard">
-                        <div class="pluvio card" id="pluvio">
-                            <span class="material-icons-sharp"> flood </span>
-                            <h3> Pluviômetro (mm) </h3>
-                            <h1 id="pluvioData" class="middle"> ... </h1>
-                            <small class="text-muted"> Últimos 30 dias </small>
-                        </div>
-                    </label>
-                    <!-- FIM DO PLUVIÔMETRO-->
-
-                    <label for="state4" class="labelCard">
-                        <div class="humidity card" id="humidity">
-                            <span class="material-symbols-outlined">humidity_percentage</span>
-                            <h3> Umidade (%) </h3>
-                            <h1 id="humData" class="middle"> ... </h1>
-                            <small class="text-muted"> Tempo real </small>
-                        </div>
-                    </label>
-                    <!-- FIM DA HUMIDADE-->
+                        </tbody>
+                    </table>
+                    <div id="avisos"></div>
+                    <div id="newDataButton">
+                        <button id="moreData" class="btnMoreData"> Mais dados </button>
+                    </div>
                 </div>
             </div>
-            <div id="manipulateRange" class="smallText">
-                <p> Indique quantas leituras você quer exibir nos gráficos: <input type="number" name="chartValue"
-                        id="chartValue" class="inputChart" min=1><input type="button" value="ok" id="chartBtn"
-                        class="chartBtn"></p>
-                <small class="text-muted"> obs: Por padrão, inicia com as ultimas 30 leituras. Os horários estão em
-                    relação ao Brasil.</small>
-            </div>
-            <section class="graphs" id="graphs">
-                <div id="TempChart" class="ChartData "></div>
-                <div id="PressChart" class="ChartData offChart"></div>
-                <div id="PluvChart" class="ChartData offChart"></div>
-                <div id="HumChart" class="ChartData offChart"></div>
-            </section>
         </main>
         <!-- Fim da main-->
 
@@ -163,15 +122,15 @@
             <div class="recent-updates">
                 <h2> Atualizações Recentes</h2>
                 <h5> Ultimo dado enviado: <span id="lastUpdate"></span></h5>
-                <h5> Versão do APP:<span id="lastUpdateApp"></span></h5>
-
+                <h5> Ultima atualização do APP: <span id="lastUpdateApp"> 28/04/2023</span></h5>
+                <h5> Versão do APP:<span id="versionApp">v2.2</span></h5>
             </div>
         </section>
     </div>
-    <script src="../../js/app.js" type="module"></script>
     <script src="../../../src/js/chart.js" type="module"></script>
-    <script src="home.js" type="module"></script>
+    <script src="../../js/app.js" type="module"></script>
     <script src="../../js/efect.js" type="module"></script>
+    <script src="./db.js" type="module"></script>
 </body>
 
 </html>

@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,500;0,700;0,900;1,700&display=swap');
 
-/* Variáveis para signUp*/
+/* Variáveis para login*/
 :root{
     --color-name: #2560b9;
     --color-primary: #7380ec;
@@ -44,26 +44,39 @@ body{
 }
 
 .container{
-    background-image: url('../../assets/back2.png');
-    background-position: center;
-    display: flex;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    margin: 0;
+    grid-template-columns: repeat(2,1fr);
+    gap: 0;
+    padding: 1rem 1rem;
+}
+
+.wave{
+    position: fixed;
+    width: 100vw;
+    height: auto;
+    left: -30vw;
+    margin: 0;
+    z-index: -1;
+}
+
+#logoImg img{
+    width: 1vw;
+    min-width: 60px;
     justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
+    text-align: center;
+    margin: auto;
 }
 
 
-
-.signUp-container {
-    background: var(--color-white);
-    width: 40rem;
-    height: auto;
+.login-container {
+    margin-top: 8rem;
+    background: #f6f6f9;
     display: flex;
     justify-content: center;
     text-align: center;
-    border-radius: var(--border-radius-3);
-    box-shadow: var(--box-shadow);
 }
 
 div#space{
@@ -71,7 +84,6 @@ div#space{
 }
 
 form{
-    margin: 4rem;
     width: 20vw;
     justify-content: center;
     text-align: center;
@@ -87,7 +99,6 @@ form h2{
 div#logoInfos{
     margin-bottom: 2rem;
 }
-
 .input-div{
     position: relative;
     display: grid;
@@ -157,7 +168,7 @@ div#logoInfos{
     transition: .3s;
 }
 
-.signUp-input{
+.login-input{
     position: absolute;
     width: 100%;
     height: 100%;
@@ -193,7 +204,7 @@ a:hover{
     color: rgb(204, 0, 255) ;
 }
 
-div #signUp{
+div #sigIn{
     color: var(--color-info-dark);
     margin-top: 2.4rem;
     font-size: 1rem;
@@ -212,11 +223,11 @@ div #recovPass{
 
 }
 
-.signUpBtn{
-    display: center;
-    width: 50%;
+.sigInBtn{
+    display: block;
+    width: 100%;
     height: 50px;
-    border-radius: 1rem;
+    border-radius: 0;
     margin: 2.0rem 0;
     font-size: 1.4rem;
     outline: none;
@@ -229,11 +240,11 @@ div #recovPass{
     transition: .4s;
 }
 
-#signUpError h5{
+#loginError h5{
     color: var(--color-danger);
     font-size: 8pt;
 }
-.signUpBtn:hover{
+.sigInBtn:hover{
     background: right #640094;
 }
 
@@ -246,23 +257,10 @@ div #perdata > input {
     display: block;
 }
 
-.logo{
-    display: flex;
-    gap: 0.8rem;
-}
-
-.logo img{
-    width: 2rem;
-    height: 2rem;
-}
-
-
-div#logoInfos{
-    margin-bottom: 2rem;
-}
-
 @media screen and (max-width: 1300px){
-
+    .container{
+        gap: 0;
+    }
 }
 
 @media screen and (max-width: 1250px){
@@ -278,7 +276,15 @@ div#logoInfos{
         width: 290px;
     }
 
-    .signUp-container{
+    .container{
+        grid-template-columns: 1fr;
+    }
+
+    .wave{
+        display: none;
+    }
+
+    .login-container{
         margin-top: -5rem;
         justify-content: center;
     }

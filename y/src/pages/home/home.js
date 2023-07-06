@@ -179,7 +179,7 @@ onAuthStateChanged(auth, (user) => {
     var dbPath = 'UsersData/' + uid.toString() + '/readings';
     var chartPath = 'UsersData/' + uid.toString() + '/charts/range';
     var nickNamePath = 'UsersData/' + uid.toString() + '/private/nickName';
-    var appUpdate = 'AppData/version/lastUpdate';
+    var appUpdate = 'AppData/updates';
 
     //referências da base de dados
     var dbRef = ref(db, dbPath);
@@ -209,8 +209,6 @@ onAuthStateChanged(auth, (user) => {
     //Coletando o nickname do usuário (apenas uma vez)
     onValue(dbnickNamePath, (snapshot) => {
       let username = snapshot.val();
-      console.log(username)
-      console.log("1")
       for (let i = 0; i < nickName.length; i++) {
         nickName[i].innerHTML = `${username}`;
       }
